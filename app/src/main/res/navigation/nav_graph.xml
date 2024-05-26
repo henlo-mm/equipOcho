@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.appmovil.mediapp.view.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeAppointmentFragment"
+            app:destination="@id/homeAppointmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.appmovil.mediapp.view.fragments.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/homeAppointmentFragment"
+        android:name="com.appmovil.mediapp.view.fragments.HomeAppointmentFragment"
+        android:label="fragment_home_appointment"
+        tools:layout="@layout/fragment_home_appointment" >
+        <action
+            android:id="@+id/action_homeAppointmentFragment_to_addAppointmentFragment"
+            app:destination="@id/addAppointmentFragment" />
+        <action
+            android:id="@+id/action_homeAppointmentFragment_to_detailAppointmentFragment"
+            app:destination="@id/detailAppointmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAppointmentFragment"
+        android:name="com.appmovil.mediapp.view.fragments.AddAppointmentFragment"
+        android:label="fragment_add_appointment"
+        tools:layout="@layout/fragment_add_appointment" >
+        <action
+            android:id="@+id/action_addAppointmentFragment_to_homeAppointmentFragment"
+            app:destination="@id/homeAppointmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailAppointmentFragment"
+        android:name="com.appmovil.mediapp.view.fragments.DetailAppointmentFragment"
+        android:label="fragment_detail_appointment"
+        tools:layout="@layout/fragment_detail_appointment" >
+        <action
+            android:id="@+id/action_detailAppointmentFragment_to_editAppointmentFragment"
+            app:destination="@id/editAppointmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editAppointmentFragment"
+        android:name="com.appmovil.mediapp.view.fragments.EditAppointmentFragment"
+        android:label="fragment_edit_appointment"
+        tools:layout="@layout/fragment_edit_appointment" >
+        <action
+            android:id="@+id/action_editAppointmentFragment_to_homeAppointmentFragment"
+            app:destination="@id/homeAppointmentFragment" />
+    </fragment>
+</navigation>
