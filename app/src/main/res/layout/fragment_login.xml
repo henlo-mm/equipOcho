@@ -1,86 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".LoginActivity">
 
-    <!-- Background Header -->
-    <View
-        android:id="@+id/toolbar_login"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/blue"
-        android:layout_alignParentTop="true"/>
 
-    <!-- App Name -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="185dp"
+        android:background="@drawable/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
-        android:id="@+id/appName"
+        android:id="@+id/mediapp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MediApp"
-        android:textSize="24sp"
-        android:textColor="#000000"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/toolbar_login"/>
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintVertical_bias="0.07" />
 
-    <!-- Email Input -->
-    <EditText
+    <TextView
         android:id="@+id/email"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
-        android:layout_below="@id/appName"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
-        android:background="@drawable/edit_text_background"
-        android:inputType="textEmailAddress"/>
+        android:text="Correo Electrónico"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/editemail"
+        app:layout_constraintStart_toStartOf="@+id/editemail"
+        app:layout_constraintTop_toBottomOf="@+id/mediapp"
+        app:layout_constraintVertical_bias="0.925" />
 
-    <!-- Password Input -->
     <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:layout_below="@id/email"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
+        android:id="@+id/editemail"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
         android:background="@drawable/edit_text_background"
-        android:inputType="textPassword"/>
+        android:elevation="13dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/mediapp"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/mediapp"
+        app:layout_constraintTop_toBottomOf="@+id/mediapp"
+        app:layout_constraintVertical_bias="0.208" />
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingresar"
+        android:text="Contraseña"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/editpassword"
+        app:layout_constraintStart_toStartOf="@+id/editpassword"
+        app:layout_constraintTop_toBottomOf="@+id/editemail"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/editpassword"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:background="@drawable/edit_text_background"
+        android:elevation="13dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editemail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editemail"
+        app:layout_constraintTop_toBottomOf="@+id/editemail"
+        app:layout_constraintVertical_bias="0.148" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnIngresar"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_border"
         android:backgroundTint="@color/blue"
-        android:textColor="#FFFFFF"
-        android:layout_below="@id/password"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
-        android:background="@drawable/button_border"/>
+        android:text="Ingresar"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editpassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editpassword"
+        app:layout_constraintTop_toBottomOf="@+id/editpassword"
+        app:layout_constraintVertical_bias="0.328" />
 
-    <!-- Register Button -->
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRegistrarse"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/button_border"
         android:text="Registrarse"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#4A47F5"
-        android:layout_below="@id/loginButton"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="10dp"
-        android:background="@drawable/button_border"/>
+        android:textColor="@color/blue"
+        android:elevation="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnIngresar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnIngresar"
+        app:layout_constraintTop_toBottomOf="@+id/btnIngresar"
+        app:layout_constraintVertical_bias="1.0" />
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
