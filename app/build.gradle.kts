@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-   // id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     id ("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
 }
@@ -75,9 +75,11 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //firestore:
-  //   implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
-   //implementation("com.google.firebase:firebase-firestore")
+    //firestore y firebase:
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
 
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.47")
