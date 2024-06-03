@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.appmovil.mediapp.repository.AuthRepository
-import com.google.firebase.auth.FirebaseAuth
 
 class AuthViewModel : ViewModel() {
     private val repository = AuthRepository()
 
-    fun registerUser(email: String, password: String, isRegister: (Boolean) -> Unit) {
-        repository.registerUser(email, password) { response ->
+    fun registerUser(email: String, password: String, name: String, lastname: String, isRegister: (Boolean) -> Unit) {
+        repository.registerUser(email, password, name, lastname) { response ->
             isRegister(response)
         }
     }
