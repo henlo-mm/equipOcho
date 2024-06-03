@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.appmovil.mediapp.R
 
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+
 class EditAppointmentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

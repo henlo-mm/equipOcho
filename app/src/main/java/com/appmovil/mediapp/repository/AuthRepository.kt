@@ -2,12 +2,17 @@ package com.appmovil.mediapp.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthRepository {
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+@Singleton
+class AuthRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
+) {
 
-    fun registerUser(email: String, password: String, name: String, lastname: String, isRegisterComplete: (Boolean) -> Unit) {
+
+    fun registerUser(email: String, password: String, name: String, lastname: String, role: String, isRegisterComplete: (Boolean) -> Unit) {
         if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && lastname.isNotEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -18,7 +23,8 @@ class AuthRepository {
                             val userMap = hashMapOf(
                                 "name" to name,
                                 "lastname" to lastname,
-                                "email" to email
+                                "email" to email,
+                                "role" to role
                             )
                             firestore.collection("users").document(userId).set(userMap)
                                 .addOnSuccessListener {

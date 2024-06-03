@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.appmovil.mediapp.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
-    private val repository = AuthRepository()
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : ViewModel() {
 
-    fun registerUser(email: String, password: String, name: String, lastname: String, isRegister: (Boolean) -> Unit) {
-        repository.registerUser(email, password, name, lastname) { response ->
+    fun registerUser(email: String, password: String, name: String, lastname: String, role: String, isRegister: (Boolean) -> Unit) {
+        repository.registerUser(email, password, name, lastname, role) { response ->
             isRegister(response)
         }
     }

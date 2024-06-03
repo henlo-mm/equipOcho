@@ -10,6 +10,9 @@ import androidx.databinding.DataBindingUtil
 import com.appmovil.mediapp.R
 import com.appmovil.mediapp.databinding.ActivityLoginBinding
 import com.appmovil.mediapp.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -45,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToHome(email: String?){
-            putExtra("email",email)
-        }
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("email", email)
         startActivity(intent)
         finish()
     }

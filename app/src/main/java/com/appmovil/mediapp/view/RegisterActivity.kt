@@ -1,5 +1,6 @@
 package com.appmovil.mediapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -10,7 +11,9 @@ import androidx.databinding.DataBindingUtil
 import com.appmovil.mediapp.R
 import com.appmovil.mediapp.databinding.ActivityRegisterBinding
 import com.appmovil.mediapp.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val authViewModel: AuthViewModel by viewModels()
@@ -68,12 +71,21 @@ class RegisterActivity : AppCompatActivity() {
         val name = binding.editnombre.text.toString()
         val lastname = binding.editApellido.text.toString()
 
-        authViewModel.registerUser(email, pass, name, lastname) { isRegister ->
+        authViewModel.registerUser(email, pass, name, lastname, "patient") { isRegister ->
             if (isRegister) {
                 Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                goToHome(email)
+
             } else {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun goToHome(email: String?){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("email", email)
+        startActivity(intent)
+        finish()
     }
 }
