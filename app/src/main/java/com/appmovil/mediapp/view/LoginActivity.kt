@@ -3,6 +3,7 @@ package com.appmovil.mediapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -22,9 +23,31 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setup() {
         binding.btnRegistrarse.setOnClickListener {
-            Log.d("LoginActivity", "Registrarse button clicked")
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnIngresar.setOnClickListener {
+            loginUser()
+        }
+    }
+
+    private fun loginUser(){
+        val email = binding.editemail.text.toString()
+        val pass = binding.editpassword.text.toString()
+        authViewModel.loginUser(email,pass){ isLogin ->
+            if (isLogin) {
+                goToHome(email)
+            }else {
+                Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun goToHome(email: String?){
+            putExtra("email",email)
+        }
+        startActivity(intent)
+        finish()
     }
 }
