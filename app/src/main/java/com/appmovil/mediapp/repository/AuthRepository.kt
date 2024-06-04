@@ -10,8 +10,6 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
-
-
     fun registerUser(email: String, password: String, name: String, lastname: String, role: String, isRegisterComplete: (Boolean) -> Unit) {
         if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && lastname.isNotEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
