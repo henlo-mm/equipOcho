@@ -1,7 +1,8 @@
 plugins {
     id("com.android.application")
-   // id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     id ("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.android")
 }
 
@@ -38,6 +39,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        viewBinding = true
     }
 }
 
@@ -75,9 +77,16 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    //firestore:
-  //   implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
-   //implementation("com.google.firebase:firebase-firestore")
+    //firestore y firebase:
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+
+    //Google Calendar
+    //implementation("com.google.android.gms:play-services-auth:20.1.0")
+    //implementation("com.google.api-client:google-api-client-android:1.33.0")
+    //implementation("com.google.apis:google-api-services-calendar:v3-rev305-1.25.0")
 
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.47")
