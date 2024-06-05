@@ -1,5 +1,11 @@
 package com.appmovil.mediapp.repository
 
+import android.content.Context
+import com.appmovil.mediapp.webservice.GmailApi
+import com.appmovil.mediapp.webservice.GoogleAuth
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.gmail.Gmail
 import com.google.firebase.firestore.FirebaseFirestore
 
 import javax.inject.Inject
@@ -7,8 +13,10 @@ import javax.inject.Singleton
 
 @Singleton
 class AppointmentRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val context: Context
 ) {
+
     fun createAppointment(patientId: String, doctorId: String, date: String, specialty: String, onComplete: (Boolean) -> Unit) {
         val appointmentMap = hashMapOf(
             "patientId" to patientId,
@@ -25,7 +33,24 @@ class AppointmentRepository @Inject constructor(
                 onComplete(false)
             }
     }
+    private fun sendEmailReminder(patientId: String, date: String) {
+        // Obtener el correo electrónico del paciente desde Firestore (asumiendo que está almacenado)
+        firestore.collection("users").document(patientId).get()
+            .addOnSuccessListener { document ->
+                val email = document.getString("email")
+                if (email != null) {
+                    val credential = GoogleAuth.getCredentials(context)
+                    val gmailService = Gmail.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), credential)
+                        .setApplicationName("MediApp")
+                        .build()
 
+                    val subject = "Recordatorio de Cita Médica"
+                    val bodyText = "Tiene una cita médica programada para la fecha: $date"
+
+                    GmailApi.sendEmail(gmailService, email, "tu-email@gmail.com", subject, bodyText)
+                }
+            }
+    }
     fun getDoctorAppointments(doctorId: String, onComplete: (List<Map<String, Any>>) -> Unit) {
         firestore.collection("appointments")
             .whereEqualTo("doctorId", doctorId)
@@ -103,4 +128,6 @@ class AppointmentRepository @Inject constructor(
                 onComplete(null)
             }
     }
+
+
 }

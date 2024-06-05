@@ -4,19 +4,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://www.googleapis.com/calendar/v3/"
+    private const val BASE_URL_CALENDAR = "https://www.googleapis.com/calendar/v3/"
 
-    private val retrofit by lazy {
+    private val retrofitCalendar by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_URL_CALENDAR)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    val api: GoogleCalendarApi by lazy {
-        retrofit.create(GoogleCalendarApi::class.java)
+    val calendarApi: GoogleCalendarApi by lazy {
+        retrofitCalendar.create(GoogleCalendarApi::class.java)
     }
-}
 
-interface GoogleCalendarApi {
 }

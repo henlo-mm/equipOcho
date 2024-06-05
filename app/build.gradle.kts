@@ -84,10 +84,16 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     //Google Calendar
-    //implementation("com.google.android.gms:play-services-auth:20.1.0")
-    //implementation("com.google.api-client:google-api-client-android:1.33.0")
-    //implementation("com.google.apis:google-api-services-calendar:v3-rev305-1.25.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.api-client:google-api-client-android:2.6.0")
+    implementation("com.google.apis:google-api-services-calendar:v3-rev411-1.25.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
+    implementation("com.google.http-client:google-http-client-gson:1.39.2")
+    implementation("com.google.http-client:google-http-client-android:1.39.2")
+    implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
 
+    implementation("com.sun.mail:javax.mail:1.6.2")
+    implementation("javax.activation:activation:1.1.1")
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
