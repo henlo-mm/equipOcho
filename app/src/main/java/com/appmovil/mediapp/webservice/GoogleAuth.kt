@@ -8,6 +8,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.gmail.GmailScopes
 import java.io.File
 import java.io.InputStream
@@ -24,7 +25,7 @@ object GoogleAuth {
             GoogleNetHttpTransport.newTrustedTransport(),
             GsonFactory.getDefaultInstance(),
             clientSecrets,
-            listOf(GmailScopes.GMAIL_SEND)
+            listOf(CalendarScopes.CALENDAR, GmailScopes.GMAIL_SEND)
         ).setDataStoreFactory(FileDataStoreFactory(File(context.filesDir, TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build()
@@ -34,7 +35,5 @@ object GoogleAuth {
             .setJsonFactory(GsonFactory.getDefaultInstance())
             .setClientSecrets(clientSecrets.details.clientId, clientSecrets.details.clientSecret)
             .build()
-            .setAccessToken(flow.loadCredential("user").accessToken)
-            .setRefreshToken(flow.loadCredential("user").refreshToken)
     }
 }

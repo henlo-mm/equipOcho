@@ -99,6 +99,7 @@ dependencies {
     implementation("com.google.http-client:google-http-client-android:1.39.2")
     implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
 
+
     implementation("com.sun.mail:javax.mail:1.6.2")
     implementation("javax.activation:activation:1.1.1")
     //dagger hilt

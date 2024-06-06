@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
 
         val email = intent.getStringExtra("email")
 
-     //   val fragment = HomeAppointmentFragment()
-        val fragment = EditAppointmentFragment()
+        val fragment = HomeAppointmentFragment()
+        //val fragment = EditAppointmentFragment()
         val bundle = Bundle()
         bundle.putString("email", email)
         fragment.arguments = bundle

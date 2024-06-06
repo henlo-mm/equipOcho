@@ -50,17 +50,19 @@ class EditAppointmentFragment : Fragment() {
                 "2020-05-10",
                 "Cardiology"
             ) { success ->
-                if (success) {
-                    Toast.makeText(context, "Appointment created successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Failed to create appointment", Toast.LENGTH_SHORT).show()
-
+                try {
+                    if (success) {
+                        Toast.makeText(context, "Appointment created successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Failed to create appointment", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("NAVIGATION", "Navigation failed inside lambda", e)
                 }
             }
-        }  catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("NAVIGATION", "Navigation failed", e)
         }
-
     }
 
 }

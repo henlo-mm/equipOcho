@@ -1,11 +1,7 @@
 package com.appmovil.mediapp.repository
 
 import android.content.Context
-import com.appmovil.mediapp.webservice.GmailApi
-import com.appmovil.mediapp.webservice.GoogleAuth
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.gmail.Gmail
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 
 import javax.inject.Inject
@@ -27,14 +23,15 @@ class AppointmentRepository @Inject constructor(
         )
         firestore.collection("appointments").add(appointmentMap)
             .addOnSuccessListener {
-                sendEmailReminder(patientId, date)
+               // sendEmailReminder(patientId, date)
                 onComplete(true)
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
+                Log.e("FIRESTORE_ERROR", "Error creating appointment", e)
                 onComplete(false)
             }
     }
-    private fun sendEmailReminder(patientId: String, date: String) {
+   /* private fun sendEmailReminder(patientId: String, date: String) {
         firestore.collection("users").document(patientId).get()
             .addOnSuccessListener { document ->
                 val email = document.getString("email")
@@ -51,6 +48,8 @@ class AppointmentRepository @Inject constructor(
                 }
             }
     }
+
+    */
     fun getDoctorAppointments(doctorId: String, onComplete: (List<Map<String, Any>>) -> Unit) {
         firestore.collection("appointments")
             .whereEqualTo("doctorId", doctorId)
