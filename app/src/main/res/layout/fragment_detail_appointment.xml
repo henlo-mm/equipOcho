@@ -119,6 +119,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#0000FF"/> <!-- Color azul -->
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="5dp"
             android:paddingVertical="10dp">
