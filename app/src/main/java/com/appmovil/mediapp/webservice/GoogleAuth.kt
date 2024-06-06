@@ -8,8 +8,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.gmail.GmailScopes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -17,23 +18,25 @@ import java.io.InputStreamReader
 object GoogleAuth {
     private const val TOKENS_DIRECTORY_PATH = "tokens"
 
-    fun getCredentials(context: Context): GoogleCredential {
-        val inputStream: InputStream = context.resources.openRawResource(R.raw.credentials)
-        val clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(), InputStreamReader(inputStream))
+    suspend fun getCredentials(context: Context): GoogleCredential {
+        return withContext(Dispatchers.IO) {
+            val inputStream: InputStream = context.resources.openRawResource(R.raw.credentials)
+            val clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(), InputStreamReader(inputStream))
 
-        val flow = GoogleAuthorizationCodeFlow.Builder(
-            GoogleNetHttpTransport.newTrustedTransport(),
-            GsonFactory.getDefaultInstance(),
-            clientSecrets,
-            listOf(CalendarScopes.CALENDAR, GmailScopes.GMAIL_SEND)
-        ).setDataStoreFactory(FileDataStoreFactory(File(context.filesDir, TOKENS_DIRECTORY_PATH)))
-            .setAccessType("offline")
-            .build()
+            val flow = GoogleAuthorizationCodeFlow.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(),
+                GsonFactory.getDefaultInstance(),
+                clientSecrets,
+                listOf(GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_READONLY)
+            ).setDataStoreFactory(FileDataStoreFactory(File(context.filesDir, TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline")
+                .build()
 
-        return GoogleCredential.Builder()
-            .setTransport(GoogleNetHttpTransport.newTrustedTransport())
-            .setJsonFactory(GsonFactory.getDefaultInstance())
-            .setClientSecrets(clientSecrets.details.clientId, clientSecrets.details.clientSecret)
-            .build()
+            GoogleCredential.Builder()
+                .setTransport(GoogleNetHttpTransport.newTrustedTransport())
+                .setJsonFactory(GsonFactory.getDefaultInstance())
+                .setClientSecrets(clientSecrets.details.clientId, clientSecrets.details.clientSecret)
+                .build()
+        }
     }
 }

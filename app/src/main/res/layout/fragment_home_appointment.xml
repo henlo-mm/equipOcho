@@ -94,7 +94,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="25dp"
-                    android:background="@drawable/service_card_bg"
+                    android:background="@drawable/service_card_selector"
                     android:contentDescription="hearth_service"
                     android:src="@drawable/heart"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -105,7 +105,7 @@
                     android:id="@+id/brain_service_card"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="@drawable/service_card_bg"
+                    android:background="@drawable/service_card_selector"
                     android:contentDescription="brain_service"
                     android:src="@drawable/brain"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -118,12 +118,11 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/service_card_bg"
+                    android:background="@drawable/service_card_selector"
                     android:contentDescription="tooth_service"
                     android:src="@drawable/tooth"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -148,6 +147,15 @@
                 app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_appointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/appointment_title"
+                android:layout_marginTop="10dp"
+                tools:listitem="@layout/managment_cards" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,8 @@ package com.appmovil.mediapp.repository
 import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,10 +15,12 @@ class AppointmentRepository @Inject constructor(
     private val context: Context
 ) {
 
-    fun createAppointment(patientId: String, doctorId: String, date: String, specialty: String, onComplete: (Boolean) -> Unit) {
+    fun createAppointment(patientId: String, doctorId: String, date: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
+
         val appointmentMap = hashMapOf(
             "patientId" to patientId,
             "doctorId" to doctorId,
+            "time" to time,
             "date" to date,
             "specialty" to specialty,
             "status" to "pending"
@@ -63,28 +67,52 @@ class AppointmentRepository @Inject constructor(
             }
     }
 
-    fun getPatientAppointments(patientId: String, onComplete: (List<Map<String, Any>>) -> Unit) {
-        firestore.collection("appointments")
-            .whereEqualTo("patientId", patientId)
-            .get()
-            .addOnSuccessListener { documents ->
-                val appointments = documents.map { it.data }
-                onComplete(appointments)
-            }
-            .addOnFailureListener {
-                onComplete(emptyList())
-            }
+    suspend fun getPatientAppointments(patientId: String, onComplete: (List<Map<String, Any>>) -> Unit) {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("appointments")
+                .whereEqualTo("patientId", patientId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val appointments = documents.map { it.data }
+                    onComplete(appointments)
+                }
+                .addOnFailureListener {
+                    onComplete(emptyList())
+                }
+        }
+
     }
 
-    fun editAppointmentByPatient(appointmentId: String, newDate: String, onComplete: (Boolean) -> Unit) {
-        firestore.collection("appointments").document(appointmentId)
-            .update("date", newDate)
-            .addOnSuccessListener {
-                onComplete(true)
-            }
-            .addOnFailureListener {
-                onComplete(false)
-            }
+    suspend fun getDoctorById(doctorId: String, onComplete: (Map<String, Any>?) -> Unit) {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("users").document(doctorId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        onComplete(document.data)
+                    } else {
+                        onComplete(null)
+                    }
+                }
+                .addOnFailureListener {
+                    onComplete(null)
+                }
+        }
+
+    }
+
+
+    suspend fun editAppointmentByPatient(appointmentId: String, newDate: String, onComplete: (Boolean) -> Unit) {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("appointments").document(appointmentId)
+                .update("date", newDate)
+                .addOnSuccessListener {
+                    onComplete(true)
+                }
+                .addOnFailureListener {
+                    onComplete(false)
+                }
+        }
+
     }
 
     fun editAppointmentByDoctor(appointmentId: String, newStatus: String, onComplete: (Boolean) -> Unit) {

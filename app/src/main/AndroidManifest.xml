@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:name=".MediApp"
@@ -18,9 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediApp"
         tools:targetApi="31">
-        <activity
-            android:name=".view.MainActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.RegisterActivity"
             android:exported="false"
@@ -35,6 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
