@@ -49,38 +49,144 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/black"
-        android:contentDescription="@string/edit_button"
-        android:elevation="6dp"
-        android:src="@drawable/pencil_icon"
-        app:fabCustomSize="45dp"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-        app:tint="@color/white"
-        app:useCompatPadding="true"
-        tools:layout_editor_absoluteX="307dp"
-        tools:layout_editor_absoluteY="607dp" />
+    <!-- Footer con los botones de eliminar y editar la cita -->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/deleteButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="#F05861"
-        android:contentDescription="@string/delete_button"
-        android:elevation="6dp"
-        android:src="@drawable/trash_can_png"
-        app:fabCustomSize="45dp"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-        app:tint="@color/white"
-        app:useCompatPadding="true"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="607dp" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_layout"
+            android:orientation="vertical"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="20dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="-29dp"
+            tools:layout_editor_absoluteY="288dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Dr. Lulu"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cardiologia"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_layout"
+                android:backgroundTint="@color/blue"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:paddingEnd="60dp"
+                android:text="Mes 24, Año"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                android:paddingEnd="60dp"
+                android:text="Dia, 8:00 AM" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="10dp">
+
+            <TableLayout
+                android:id="@+id/tlInformacionPaciente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1">
+
+                <TableRow android:layout_marginVertical="5dp">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carlos Simpson" />
+                </TableRow>
+
+                <TableRow android:layout_marginVertical="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cedula"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carlos Simpson" />
+
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/button_border"
+            android:scaleType="fitCenter"
+            android:src="@drawable/trash_can" />
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/button_border"
+            android:scaleType="fitCenter"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/pencil_icon" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
