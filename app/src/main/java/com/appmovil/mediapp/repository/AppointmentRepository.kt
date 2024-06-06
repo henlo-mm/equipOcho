@@ -27,6 +27,7 @@ class AppointmentRepository @Inject constructor(
         )
         firestore.collection("appointments").add(appointmentMap)
             .addOnSuccessListener {
+                sendEmailReminder(patientId, date)
                 onComplete(true)
             }
             .addOnFailureListener {
@@ -34,7 +35,6 @@ class AppointmentRepository @Inject constructor(
             }
     }
     private fun sendEmailReminder(patientId: String, date: String) {
-        // Obtener el correo electrónico del paciente desde Firestore (asumiendo que está almacenado)
         firestore.collection("users").document(patientId).get()
             .addOnSuccessListener { document ->
                 val email = document.getString("email")
@@ -47,7 +47,7 @@ class AppointmentRepository @Inject constructor(
                     val subject = "Recordatorio de Cita Médica"
                     val bodyText = "Tiene una cita médica programada para la fecha: $date"
 
-                    GmailApi.sendEmail(gmailService, email, "tu-email@gmail.com", subject, bodyText)
+                    GmailApi.sendEmail(gmailService, email, "esperanzacalderon@gmail.com", subject, bodyText)
                 }
             }
     }
@@ -128,6 +128,8 @@ class AppointmentRepository @Inject constructor(
                 onComplete(null)
             }
     }
+
+
 
 
 }
