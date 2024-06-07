@@ -16,16 +16,15 @@ class AuthRepository @Inject constructor(
 ) {
     suspend fun registerUser(
         email: String, password: String, name: String, lastname: String,
-        document: String, role: String, specialty: String, isRegisterComplete: (Boolean) -> Unit
-    ) {
+        document: String, role: String, specialty: String
+    ): Boolean {
         return withContext(Dispatchers.IO) {
             if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && lastname.isNotEmpty()) {
                 try {
-
                     val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
                     val user = authResult.user
-                    user?.let {
-                        val userId = it.uid
+                    if (user != null) {
+                        val userId = user.uid
                         val userMap = hashMapOf(
                             "name" to name,
                             "lastname" to lastname,
@@ -35,27 +34,20 @@ class AuthRepository @Inject constructor(
                             "specialty" to specialty
                         )
                         firestore.collection("users").document(userId).set(userMap).await()
-                        withContext(Dispatchers.Main) {
-                            isRegisterComplete(true)
-                        }
-                    } ?: run {
-                        withContext(Dispatchers.Main) {
-                            isRegisterComplete(false)
-                        }
+                        return@withContext true
+                    } else {
+                        return@withContext false
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    withContext(Dispatchers.Main) {
-                        isRegisterComplete(false)
-                    }
+                    return@withContext false
                 }
             } else {
-                withContext(Dispatchers.Main) {
-                    isRegisterComplete(false)
-                }
+                return@withContext false
             }
         }
     }
+
 
     suspend fun loginUser(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {

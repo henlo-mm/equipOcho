@@ -72,8 +72,7 @@ class RegisterActivity : AppCompatActivity() {
         val lastname = binding.editApellido.text.toString()
         val document = binding.editDocument.text.toString()
 
-
-        authViewModel.registerUser(email, pass, name, lastname, document, "patient", "") { isRegister ->
+        authViewModel.registerUser(email, pass, name, lastname, document, "patient", "").observe(this) { isRegister ->
             if (isRegister) {
                 Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
                 goToHome(email)
@@ -81,6 +80,7 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
 

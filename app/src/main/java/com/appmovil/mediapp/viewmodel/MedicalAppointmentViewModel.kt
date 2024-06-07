@@ -162,12 +162,15 @@ class MedicalAppointmentViewModel @Inject constructor(
 
     }
 
-    fun deleteAppointment(appointmentId: String, onComplete: (Boolean) -> Unit) {
+    fun deleteAppointment(appointmentId: String) : LiveData<Boolean>  {
+        val delete = MutableLiveData<Boolean>()
+
         viewModelScope.launch {
-            appointmentRepository.deleteAppointment(appointmentId) {  success ->
-                onComplete(success)
-            }
+           val result = appointmentRepository.deleteAppointment(appointmentId)
+            delete.postValue(result)
+
         }
+        return delete
     }
 
     fun fetchUserData() {

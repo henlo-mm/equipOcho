@@ -6,6 +6,7 @@ import com.appmovil.mediapp.data.PexelsResponse
 import com.appmovil.mediapp.webservice.ApiClient
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
@@ -135,26 +136,23 @@ class AppointmentRepository @Inject constructor(
 
     }
 
-    fun editAppointmentByDoctor(appointmentId: String, newStatus: String, onComplete: (Boolean) -> Unit) {
-        firestore.collection("appointments").document(appointmentId)
-            .update("status", newStatus)
-            .addOnSuccessListener {
-                onComplete(true)
-            }
-            .addOnFailureListener {
-                onComplete(false)
-            }
-    }
 
-    fun deleteAppointment(appointmentId: String, onComplete: (Boolean) -> Unit) {
-        firestore.collection("appointments").document(appointmentId)
-            .delete()
-            .addOnSuccessListener {
-                onComplete(true)
+    suspend fun deleteAppointment(appointmentId: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                firestore.collection("appointments").document(appointmentId)
+                    .delete()
+                    .await()
+
+                return@withContext true
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@withContext false
             }
-            .addOnFailureListener {
-                onComplete(false)
-            }
+
+        }
+
     }
 
     fun assignDoctorAutomatically(specialty: String, onComplete: (String?) -> Unit) {

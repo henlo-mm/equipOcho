@@ -86,19 +86,18 @@ class DetailAppointmentFragment : Fragment() {
 
         appointmentViewModel.deleteAppointment(
             receivedAppointment.id
-        ) { success ->
+        ).observe(viewLifecycleOwner) { success ->
+
             if (success) {
                 Toast.makeText(context, "Appointment deleted successfully", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
                 appointmentViewModel.getPatientAppointments()
-
             } else {
-                Toast.makeText(context, "Failed to delete appointment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
 
         }
     }
-
 
 
 }

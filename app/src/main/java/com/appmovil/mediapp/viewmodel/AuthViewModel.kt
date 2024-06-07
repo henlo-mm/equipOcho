@@ -14,12 +14,13 @@ class AuthViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    fun registerUser(email: String, password: String, name: String, lastname: String, document: String, role: String, specialty: String, isRegister: (Boolean) -> Unit) {
+    fun registerUser(email: String, password: String, name: String, lastname: String, document: String, role: String, specialty: String): LiveData<Boolean> {
+        val registerResult = MutableLiveData<Boolean>()
         viewModelScope.launch {
-            repository.registerUser(email, password, name, lastname, document, role, specialty) { response ->
-                isRegister(response)
-            }
+            val result = repository.registerUser(email, password, name, lastname, document, role, specialty)
+            registerResult.postValue(result)
         }
+        return registerResult
     }
 
     fun loginUser(email: String, password: String): LiveData<Boolean> {

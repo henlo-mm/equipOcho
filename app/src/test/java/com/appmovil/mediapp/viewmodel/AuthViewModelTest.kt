@@ -75,24 +75,22 @@ class AuthViewModelTest {
         val isRegister = true
 
         // when
-        `when`(mockAuthRepository.registerUser(email, password, name, lastname, document, role, specialty, Mockito.any())).thenAnswer { invocation ->
-            val callback = invocation.getArgument<(Boolean) -> Unit>(7)
-            callback(isRegister)
-        }
+        `when`(mockAuthRepository.registerUser(email, password, name, lastname, document, role, specialty)).thenReturn(isRegister)
 
-        // Create a captor for the callback
-        val callbackCaptor = argumentCaptor<(Boolean) -> Unit>()
-        AuthViewModel.registerUser(email, password, name, lastname, document, role, specialty) { result ->
-            assertEquals(isRegister, result)
-        }
 
-        // Capture the callback and invoke it with the expected value
-        verify(mockAuthRepository).registerUser(
-            eq(email), eq(password), eq(name), eq(lastname), eq(document), eq(role), eq(specialty), callbackCaptor.capture()
-        )
+        val liveData = AuthViewModel.registerUser(email, password, name, lastname, document, role, specialty)
 
-        // Simulate repository's callback
-        callbackCaptor.firstValue.invoke(isRegister)
+        val observer = mock(Observer::class.java) as Observer<Boolean>
+        liveData.observeForever(observer)
+
+        // Capture the emitted value
+        val captor = argumentCaptor<Boolean>()
+        verify(observer).onChanged(captor.capture())
+
+        // Then
+        assertEquals(isRegister, captor.firstValue)
+
+
     }
 
 }
