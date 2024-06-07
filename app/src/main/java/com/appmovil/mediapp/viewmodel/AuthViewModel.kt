@@ -31,5 +31,8 @@ class AuthViewModel @Inject constructor(
         }
         return loginResult
     }
+    fun logOut(){
+        repository.logOut()
+    }
 
 }

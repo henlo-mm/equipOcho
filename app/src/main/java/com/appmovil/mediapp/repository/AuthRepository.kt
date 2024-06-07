@@ -62,12 +62,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    fun sesion(email: String?, isEnableView: (Boolean) -> Unit) {
-        if (email != null) {
-            isEnableView(true)
-        } else {
-            isEnableView(false)
-        }
+     fun logOut() {
+        firebaseAuth.signOut()
     }
 
     suspend fun getUserData(): Map<String, Any>? {

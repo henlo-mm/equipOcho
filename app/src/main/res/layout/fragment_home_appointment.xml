@@ -162,6 +162,18 @@
             android:layout_marginTop="10dp"
             tools:listitem="@layout/managment_cards" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/logOut"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="boton_logout"
+            android:src="@drawable/logout_12080248"
+            android:backgroundTint="#3F51B5"
+            app:fabCustomSize="50dp"
+            app:useCompatPadding="true"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

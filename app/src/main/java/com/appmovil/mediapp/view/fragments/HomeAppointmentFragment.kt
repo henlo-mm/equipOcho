@@ -13,12 +13,14 @@ import androidx.navigation.fragment.findNavController
 import com.appmovil.mediapp.R
 import com.appmovil.mediapp.databinding.FragmentHomeAppointmentBinding
 import com.appmovil.mediapp.view.adapter.AppointmentAdapter
+import com.appmovil.mediapp.viewmodel.AuthViewModel
 import com.appmovil.mediapp.viewmodel.MedicalAppointmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeAppointmentFragment : Fragment() {
     private val appointmentViewModel: MedicalAppointmentViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private lateinit var binding: FragmentHomeAppointmentBinding
 
     override fun onCreateView(
@@ -44,6 +46,10 @@ class HomeAppointmentFragment : Fragment() {
         }
         binding.toothServiceCard.setOnClickListener {
             navigateToAddAppointment(3)
+        }
+        binding.logOut.setOnClickListener {
+            authViewModel.logOut()
+            requireActivity().finish()
         }
 
         val callback = object : OnBackPressedCallback(true) {
