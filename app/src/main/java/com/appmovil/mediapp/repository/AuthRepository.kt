@@ -1,8 +1,6 @@
 package com.appmovil.mediapp.repository
 
 import android.util.Log
-import android.os.Handler
-import android.os.Looper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -100,7 +98,5 @@ class AuthRepository @Inject constructor(
     fun getCurrentUserUid(): String? {
         return firebaseAuth.currentUser?.uid
     }
-    fun getCurrentUserEmail(): String? {
-        return FirebaseAuth.getInstance().currentUser?.email
-    }
+
 }
