@@ -24,9 +24,6 @@ class MedicalAppointmentViewModel @Inject constructor(
     private val _userData = MutableLiveData<Map<String, String>>()
     val userData: LiveData<Map<String, String>> get() = _userData
 
-    private val _doctorImage = MutableLiveData<String?>()
-    val doctorImage: LiveData<String?> = _doctorImage
-
     fun createAppointmentWithAutoAssign(date: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         val patientId = authRepository.getCurrentUserUid().toString()
         Log.d("CREATE_APPOINTMENT", "Asignando doctor automáticamente para la especialidad: $specialty")
