@@ -1,6 +1,7 @@
 package com.appmovil.mediapp.view.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
 import com.appmovil.mediapp.R
 import com.appmovil.mediapp.databinding.FragmentHomeAppointmentBinding
-import com.appmovil.mediapp.view.adapters.AppointmentAdapter
+import com.appmovil.mediapp.view.adapter.AppointmentAdapter
 import com.appmovil.mediapp.viewmodel.MedicalAppointmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +34,7 @@ class HomeAppointmentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        appointmentViewModel.fetchUserData()
 
         binding.hearthServiceCard.setOnClickListener {
             navigateToAddAppointment(1)
@@ -63,12 +65,31 @@ class HomeAppointmentFragment : Fragment() {
     }
 
     private fun observerListAppointment(){
-        appointmentViewModel.getPatientAppointments()
+        var userRole: String? = null
+
+        appointmentViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            userData?.let {
+                val userName = it["name"]
+                val userLastName = it["lastname"]
+                val userFullName = "$userName $userLastName"
+                binding.welcomeMsg.text = "Hola, $userFullName"
+
+                userRole = it["role"]
+
+                if (userRole == "doctor") {
+                    binding.servicesLayout.visibility = View.GONE
+                    appointmentViewModel.getDoctorAppointments()
+                } else {
+                    binding.servicesLayout.visibility = View.VISIBLE
+                    appointmentViewModel.getPatientAppointments()
+                }
+            }
+        }
         appointmentViewModel.appointments.observe(viewLifecycleOwner){ listAppointment ->
             val recycler = binding.recyclerViewAppointments
             val layoutManager = LinearLayoutManager(context)
             recycler.layoutManager = layoutManager
-            val adapter = AppointmentAdapter(listAppointment, findNavController())
+            val adapter = AppointmentAdapter(listAppointment, findNavController(), userRole.toString(), appointmentViewModel)
             recycler.adapter = adapter
             adapter.notifyDataSetChanged()
         }

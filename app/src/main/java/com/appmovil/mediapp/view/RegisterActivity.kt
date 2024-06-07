@@ -67,10 +67,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerUser() {
         val email = binding.editemailregister.text.toString()
-        val pass = binding.editcontrasena.text.toString()
+        val pass = binding.editpasswordregister.text.toString()
         val name = binding.editnombre.text.toString()
         val lastname = binding.editApellido.text.toString()
         val document = binding.editDocument.text.toString()
+
 
         authViewModel.registerUser(email, pass, name, lastname, document, "patient", "") { isRegister ->
             if (isRegister) {

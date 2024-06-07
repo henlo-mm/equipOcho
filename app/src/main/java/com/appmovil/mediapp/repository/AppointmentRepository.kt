@@ -2,9 +2,14 @@ package com.appmovil.mediapp.repository
 
 import android.content.Context
 import android.util.Log
+import com.appmovil.mediapp.data.PexelsResponse
+import com.appmovil.mediapp.webservice.ApiClient
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,25 +46,7 @@ class AppointmentRepository @Inject constructor(
                 onComplete(false)
             }
     }
-   /* private fun sendEmailReminder(patientId: String, date: String) {
-        firestore.collection("users").document(patientId).get()
-            .addOnSuccessListener { document ->
-                val email = document.getString("email")
-                if (email != null) {
-                    val credential = GoogleAuth.getCredentials(context)
-                    val gmailService = Gmail.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), credential)
-                        .setApplicationName("MediApp")
-                        .build()
 
-                    val subject = "Recordatorio de Cita Médica"
-                    val bodyText = "Tiene una cita médica programada para la fecha: $date"
-
-                    GmailApi.sendEmail(gmailService, email, "esperanzacalderon@gmail.com", subject, bodyText)
-                }
-            }
-    }
-
-    */
     fun getDoctorAppointments(doctorId: String, onComplete: (List<Map<String, Any>>) -> Unit) {
         firestore.collection("appointments")
             .whereEqualTo("doctorId", doctorId)
@@ -107,6 +94,22 @@ class AppointmentRepository @Inject constructor(
 
     }
 
+    suspend fun getPatientById(patientId: String, onComplete: (Map<String, Any>?) -> Unit) {
+        return withContext(Dispatchers.IO) {
+            firestore.collection("users").document(patientId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        onComplete(document.data)
+                    } else {
+                        onComplete(null)
+                    }
+                }
+                .addOnFailureListener {
+                    onComplete(null)
+                }
+        }
+
+    }
 
     suspend fun editAppointmentByPatient(appointmentId: String, newDate: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         return withContext(Dispatchers.IO) {
@@ -173,7 +176,23 @@ class AppointmentRepository @Inject constructor(
             }
     }
 
-
+    suspend fun getDoctorImage(specialty: String): String? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = ApiClient.pexelsApiService.searchImages(specialty, 1).execute()
+                if (response.isSuccessful) {
+                    val photos = response.body()?.photos
+                    if (!photos.isNullOrEmpty()) {
+                        return@withContext photos[0].src.medium
+                    }
+                }
+                null
+            } catch (e: Exception) {
+                Log.e("API_ERROR", "Error fetching image", e)
+                null
+            }
+        }
+    }
 
 
 }

@@ -24,6 +24,9 @@ class MedicalAppointmentViewModel @Inject constructor(
     private val _userData = MutableLiveData<Map<String, String>>()
     val userData: LiveData<Map<String, String>> get() = _userData
 
+    private val _doctorImage = MutableLiveData<String?>()
+    val doctorImage: LiveData<String?> = _doctorImage
+
     fun createAppointmentWithAutoAssign(date: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         val patientId = authRepository.getCurrentUserUid().toString()
         Log.d("CREATE_APPOINTMENT", "Asignando doctor automáticamente para la especialidad: $specialty")
@@ -98,6 +101,61 @@ class MedicalAppointmentViewModel @Inject constructor(
         }
     }
 
+    fun getDoctorAppointments() {
+        viewModelScope.launch {
+            val doctorId = authRepository.getCurrentUserUid()?.toString() ?: return@launch
+            appointmentRepository.getDoctorAppointments(doctorId) { appointments ->
+                val updatedAppointments = mutableListOf<MedicalAppointment>()
+                var processedCount = 0
+
+                if (appointments.isEmpty()) {
+                    _appointments.postValue(updatedAppointments)
+                    return@getDoctorAppointments
+                }
+
+                appointments.forEach { appointment ->
+                    val patientId = appointment["patientId"] as? String
+
+                    if (patientId != null) {
+                        viewModelScope.launch {
+
+                            appointmentRepository.getPatientById(patientId) { patient ->
+
+                                val patientName = patient?.get("name") as? String ?: "Unknown"
+                                val id = appointment["id"].toString()
+                                val date = appointment["date"].toString()
+                                val time = appointment["time"].toString()
+                                val specialty = appointment["specialty"].toString()
+
+                                updatedAppointments.add(
+                                    MedicalAppointment(
+                                        id = id,
+                                        date = date,
+                                        time = time,
+                                        doctorName = patientName, // Aquí cambia a patientName
+                                        doctorSpecialty = specialty
+                                    )
+                                )
+
+                                processedCount++
+
+                                if (processedCount == appointments.size) {
+                                    _appointments.postValue(updatedAppointments)
+                                }
+                            }
+                        }
+                    } else {
+                        processedCount++
+                        if (processedCount == appointments.size) {
+                            _appointments.postValue(updatedAppointments)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     fun editAppointmentByPatient(appointmentId: String, newDate: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
             appointmentRepository.editAppointmentByPatient(appointmentId, newDate, time, specialty) {  success ->
@@ -124,5 +182,13 @@ class MedicalAppointmentViewModel @Inject constructor(
             _userData.postValue(stringResult)
         }
     }
+
+    fun fetchDoctorImage(specialty: String, onImageFetched: (String?) -> Unit) {
+        viewModelScope.launch {
+            val imageUrl = appointmentRepository.getDoctorImage(specialty)
+            onImageFetched(imageUrl)
+        }
+    }
+
 
 }

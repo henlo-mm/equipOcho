@@ -4,6 +4,7 @@ plugins {
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.android")
+
 }
 
 android {
@@ -90,19 +91,17 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
 
-    //Google Api
-    //implementation("com.google.android.gms:play-services-auth:21.2.0")
-    //implementation("com.google.api-client:google-api-client-android:2.6.0")
-    //implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
-    //implementation("com.google.http-client:google-http-client-gson:1.39.2")
-    //implementation("com.google.http-client:google-http-client-android:1.39.2")
-    //implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
-
 
     implementation("com.sun.mail:javax.mail:1.6.2")
     implementation("javax.activation:activation:1.1.1")
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
+
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
+
 
 }

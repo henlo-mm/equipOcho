@@ -1,6 +1,8 @@
 package com.appmovil.mediapp.repository
 
 import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -14,10 +16,14 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
-    suspend fun registerUser(email: String, password: String, name: String, lastname: String, document: String, role: String, specialty: String, isRegisterComplete: (Boolean) -> Unit) {
+    suspend fun registerUser(
+        email: String, password: String, name: String, lastname: String,
+        document: String, role: String, specialty: String, isRegisterComplete: (Boolean) -> Unit
+    ) {
         return withContext(Dispatchers.IO) {
             if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && lastname.isNotEmpty()) {
                 try {
+
                     val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
                     val user = authResult.user
                     user?.let {
@@ -31,20 +37,27 @@ class AuthRepository @Inject constructor(
                             "specialty" to specialty
                         )
                         firestore.collection("users").document(userId).set(userMap).await()
-                        isRegisterComplete(true)
+                        withContext(Dispatchers.Main) {
+                            isRegisterComplete(true)
+                        }
                     } ?: run {
-                        isRegisterComplete(false)
+                        withContext(Dispatchers.Main) {
+                            isRegisterComplete(false)
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    isRegisterComplete(false)
+                    withContext(Dispatchers.Main) {
+                        isRegisterComplete(false)
+                    }
                 }
             } else {
-                isRegisterComplete(false)
+                withContext(Dispatchers.Main) {
+                    isRegisterComplete(false)
+                }
             }
         }
     }
-
 
     suspend fun loginUser(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
@@ -52,6 +65,7 @@ class AuthRepository @Inject constructor(
                 val task = firebaseAuth.signInWithEmailAndPassword(email, password).await()
                 task.user != null
             } catch (e: Exception) {
+                Log.d("Exception grg", e.toString())
                 e.printStackTrace()
                 false
             }
