@@ -25,9 +25,13 @@ class AppointmentRepository @Inject constructor(
             "specialty" to specialty,
             "status" to "pending"
         )
+        Log.d("CREATE_APPOINTMENT", "Datos de la cita: $appointmentMap")
+
         firestore.collection("appointments").add(appointmentMap)
             .addOnSuccessListener {
                // sendEmailReminder(patientId, date)
+                Log.d("CREATE_APPOINTMENT", "Cita creada exitosamente")
+
                 onComplete(true)
             }
             .addOnFailureListener { e ->

@@ -36,7 +36,9 @@ class AddAppointmentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setup()
         observeUserData()
-
+        binding.imageButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
     private fun setup() {
         val serviceId = arguments?.getInt("serviceId") ?: 0
@@ -57,6 +59,8 @@ class AddAppointmentFragment : Fragment() {
             userData?.let {
                 binding.addName.setText(it["name"] ?: "")
                 binding.addLastName.setText(it["lastname"] ?: "")
+                binding.addCedula.setText(it["document"] ?: "")
+
             }
         }
 
@@ -65,13 +69,12 @@ class AddAppointmentFragment : Fragment() {
     fun createAppointmentWithAutoAssign() {
         try {
 
-            //val document = binding.addCedula.text.toString()
             val specialty = binding.addEspecialidad.text.toString()
             val date = binding.addDate.text.toString()
             val hour = binding.addHour.text.toString()
 
             appointmentViewModel.createAppointmentWithAutoAssign(
-                specialty, date, hour
+                 date, hour, specialty
             ) { success ->
                 try {
                     if (success) {

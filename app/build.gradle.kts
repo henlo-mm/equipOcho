@@ -85,18 +85,18 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     //firestore y firebase:
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
 
     //Google Api
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
-    implementation("com.google.api-client:google-api-client-android:2.6.0")
-    implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
-    implementation("com.google.http-client:google-http-client-gson:1.39.2")
-    implementation("com.google.http-client:google-http-client-android:1.39.2")
-    implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
+    //implementation("com.google.android.gms:play-services-auth:21.2.0")
+    //implementation("com.google.api-client:google-api-client-android:2.6.0")
+    //implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
+    //implementation("com.google.http-client:google-http-client-gson:1.39.2")
+    //implementation("com.google.http-client:google-http-client-android:1.39.2")
+    //implementation("com.google.apis:google-api-services-gmail:v1-rev110-1.25.0")
 
 
     implementation("com.sun.mail:javax.mail:1.6.2")

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.appmovil.mediapp.R
 import com.appmovil.mediapp.databinding.FragmentDetailAppointmentBinding
 import com.appmovil.mediapp.model.MedicalAppointment
@@ -31,12 +32,13 @@ class DetailAppointmentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getAppointmentData()
         controladores()
-      /*  binding.backButton.setOnClickListener {
+        binding.imageButton.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        appointmentViewModel.fetchUserData()
 
-       */
+
     }
 
     private fun controladores() {
@@ -64,16 +66,20 @@ class DetailAppointmentFragment : Fragment() {
 
     private fun getAppointmentData() {
         val receivedBundle = arguments
+        appointmentViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            userData?.let {
+                val fullName = "${it["lastname"] ?: ""} ${it["name"] ?: ""}"
+                binding.userName.text = fullName
+                binding.document.text =  (it["document"] ?: "")
+
+            }
+        }
         receivedAppointment = receivedBundle?.getSerializable("appointment") as MedicalAppointment
 
-   /*     binding.numberAppointment.text = "#${receivedAppointment.id}"
-        binding.titleTextDetailsName.text = "${receivedAppointment.dogName}"
-        binding.petBreedName.text = "${receivedAppointment.breed}"
-        binding.petSymptoms.text = "${receivedAppointment.symptom}"
-        binding.ownerName.text = "Propietario: ${receivedAppointment.ownerName}"
-        binding.ownerPhone.text = "Teléfono: ${receivedAppointment.phone}"
-
-    */
+        binding.doctorName.text = "${receivedAppointment.doctorName}"
+        binding.specialty.text = "${receivedAppointment.doctorSpecialty}"
+        binding.date.text = "${receivedAppointment.date}"
+        binding.time.text = "${receivedAppointment.time}"
 
 
     }

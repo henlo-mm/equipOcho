@@ -1,5 +1,6 @@
 package com.appmovil.mediapp.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -13,45 +14,37 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
-    suspend fun registerUser(email: String, password: String, name: String, lastname: String, role: String, isRegisterComplete: (Boolean) -> Unit) {
+    suspend fun registerUser(email: String, password: String, name: String, lastname: String, document: String, role: String, specialty: String, isRegisterComplete: (Boolean) -> Unit) {
         return withContext(Dispatchers.IO) {
             if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && lastname.isNotEmpty()) {
-                firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val user = firebaseAuth.currentUser
-                            user?.let {
-                                val userId = it.uid
-                                val userMap = hashMapOf(
-                                    "name" to name,
-                                    "lastname" to lastname,
-                                    "email" to email,
-                                    "role" to role
-                                )
-                                firestore.collection("users").document(userId).set(userMap)
-                                    .addOnSuccessListener {
-                                        isRegisterComplete(true)
-                                    }
-                                    .addOnFailureListener {
-                                        isRegisterComplete(false)
-                                    }
-                            } ?: run {
-                                isRegisterComplete(false)
-                            }
-                        } else {
-                            isRegisterComplete(false)
-                        }
-                    }
-                    .addOnFailureListener {
-                        it.printStackTrace()
+                try {
+                    val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                    val user = authResult.user
+                    user?.let {
+                        val userId = it.uid
+                        val userMap = hashMapOf(
+                            "name" to name,
+                            "lastname" to lastname,
+                            "document" to document,
+                            "email" to email,
+                            "role" to role,
+                            "specialty" to specialty
+                        )
+                        firestore.collection("users").document(userId).set(userMap).await()
+                        isRegisterComplete(true)
+                    } ?: run {
                         isRegisterComplete(false)
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    isRegisterComplete(false)
+                }
             } else {
                 isRegisterComplete(false)
             }
         }
-
     }
+
 
     suspend fun loginUser(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
@@ -73,12 +66,13 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserData(uid: String): Map<String, Any>? {
+    suspend fun getUserData(): Map<String, Any>? {
+        val userUid = getCurrentUserUid().toString()
         return withContext(Dispatchers.IO) {
             try {
-                val document = firestore.collection("users").document(uid).get().await()
-                if (document.exists()) {
-                    document.data
+                val documentSnapshot = firestore.collection("users").document(userUid).get().await()
+                if (documentSnapshot.exists()) {
+                    documentSnapshot.data
                 } else {
                     null
                 }
@@ -89,8 +83,10 @@ class AuthRepository @Inject constructor(
         }
     }
 
-
     fun getCurrentUserUid(): String? {
         return firebaseAuth.currentUser?.uid
+    }
+    fun getCurrentUserEmail(): String? {
+        return FirebaseAuth.getInstance().currentUser?.email
     }
 }

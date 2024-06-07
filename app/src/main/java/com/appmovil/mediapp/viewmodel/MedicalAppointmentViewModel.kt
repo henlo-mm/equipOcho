@@ -26,16 +26,22 @@ class MedicalAppointmentViewModel @Inject constructor(
 
     fun createAppointmentWithAutoAssign(date: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         val patientId = authRepository.getCurrentUserUid().toString()
+        Log.d("CREATE_APPOINTMENT", "Asignando doctor automáticamente para la especialidad: $specialty")
+
         appointmentRepository.assignDoctorAutomatically(specialty) { doctorId ->
             if (doctorId != null) {
+                Log.d("CREATE_APPOINTMENT", "Doctor asignado: $doctorId")
                 appointmentRepository.createAppointment(patientId, doctorId, date, time, specialty) { success ->
+                    Log.d("CREATE_APPOINTMENT", "Resultado de creación de cita: $success")
                     onComplete(success)
                 }
             } else {
+                Log.e("CREATE_APPOINTMENT", "No se pudo asignar un doctor automáticamente para la especialidad: $specialty")
                 onComplete(false)
             }
         }
     }
+
 
     fun getPatientAppointments() {
         viewModelScope.launch {
@@ -60,13 +66,15 @@ class MedicalAppointmentViewModel @Inject constructor(
                                 val doctorName = doctor?.get("name") as? String ?: "Unknown"
                                 val id = appointment["id"].toString()
                                 val date = appointment["date"].toString()
+                                val time = appointment["time"].toString()
+
                                 val specialty = appointment["specialty"].toString()
 
                                 updatedAppointments.add(
                                     MedicalAppointment(
                                         id = id,
                                         date = date,
-                                        time = date,
+                                        time = time,
                                         doctorName = doctorName,
                                         doctorSpecialty = specialty
                                     )
@@ -102,9 +110,10 @@ class MedicalAppointmentViewModel @Inject constructor(
     }
 
     fun fetchUserData() {
-        val userId = authRepository.getCurrentUserUid().toString()
+
         viewModelScope.launch {
-            val result = authRepository.getUserData(userId)
+            val result = authRepository.getUserData()
+
             val stringResult = result?.mapValues { it.value.toString() } as Map<String, String>
             _userData.postValue(stringResult)
         }
