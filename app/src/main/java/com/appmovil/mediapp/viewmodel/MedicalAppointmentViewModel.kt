@@ -83,7 +83,6 @@ class MedicalAppointmentViewModel @Inject constructor(
                                 processedCount++
 
                                 if (processedCount == appointments.size) {
-                                    Log.d("ViewModel", "Appointments updated: $updatedAppointments")
                                     _appointments.postValue(updatedAppointments)
                                 }
                             }
@@ -99,14 +98,21 @@ class MedicalAppointmentViewModel @Inject constructor(
         }
     }
 
-
-    fun editAppointmentByPatient(appointmentId: String, newDate: String, onComplete: (Boolean) -> Unit) {
+    fun editAppointmentByPatient(appointmentId: String, newDate: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
-            appointmentRepository.editAppointmentByPatient(appointmentId, newDate) {  success ->
+            appointmentRepository.editAppointmentByPatient(appointmentId, newDate, time, specialty) {  success ->
                 onComplete(success)
             }
         }
 
+    }
+
+    fun deleteAppointment(appointmentId: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            appointmentRepository.deleteAppointment(appointmentId) {  success ->
+                onComplete(success)
+            }
+        }
     }
 
     fun fetchUserData() {

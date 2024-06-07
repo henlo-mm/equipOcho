@@ -187,6 +187,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
+            android:id="@+id/deleteBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/button_border"
@@ -194,6 +195,7 @@
             android:src="@drawable/trash_can" />
 
         <ImageButton
+            android:id="@+id/editBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/button_border"

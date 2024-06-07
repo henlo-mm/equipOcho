@@ -16,8 +16,10 @@ class AppointmentRepository @Inject constructor(
 ) {
 
     fun createAppointment(patientId: String, doctorId: String, date: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
+        val appointmentId = firestore.collection("appointments").document().id
 
         val appointmentMap = hashMapOf(
+            "id" to appointmentId,
             "patientId" to patientId,
             "doctorId" to doctorId,
             "time" to time,
@@ -27,7 +29,7 @@ class AppointmentRepository @Inject constructor(
         )
         Log.d("CREATE_APPOINTMENT", "Datos de la cita: $appointmentMap")
 
-        firestore.collection("appointments").add(appointmentMap)
+        firestore.collection("appointments").document(appointmentId).set(appointmentMap)
             .addOnSuccessListener {
                // sendEmailReminder(patientId, date)
                 Log.d("CREATE_APPOINTMENT", "Cita creada exitosamente")
@@ -78,6 +80,7 @@ class AppointmentRepository @Inject constructor(
                 .get()
                 .addOnSuccessListener { documents ->
                     val appointments = documents.map { it.data }
+
                     onComplete(appointments)
                 }
                 .addOnFailureListener {
@@ -105,14 +108,24 @@ class AppointmentRepository @Inject constructor(
     }
 
 
-    suspend fun editAppointmentByPatient(appointmentId: String, newDate: String, onComplete: (Boolean) -> Unit) {
+    suspend fun editAppointmentByPatient(appointmentId: String, newDate: String, time: String, specialty: String, onComplete: (Boolean) -> Unit) {
         return withContext(Dispatchers.IO) {
+            val updates = hashMapOf<String, Any>(
+                "date" to newDate,
+                "time" to time,
+                "specialty" to specialty
+            )
+
             firestore.collection("appointments").document(appointmentId)
-                .update("date", newDate)
+                .update(updates)
                 .addOnSuccessListener {
+                    Log.d("FirestoreUpdate", "DocumentSnapshot successfully updated!")
+
                     onComplete(true)
                 }
-                .addOnFailureListener {
+                .addOnFailureListener {e->
+                    Log.w("FirestoreUpdate", "Error updating document", e)
+
                     onComplete(false)
                 }
         }

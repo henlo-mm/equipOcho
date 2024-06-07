@@ -11,7 +11,11 @@
     <string name="delete_button">delete_button</string>
     <string name="edit_button" />
 
-
+    <string-array name="specialties_array">
+        <item>Cardiología</item>
+        <item>Neurología</item>
+        <item>Odontología</item>
+    </string-array>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

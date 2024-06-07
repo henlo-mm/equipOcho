@@ -1,10 +1,12 @@
 package com.appmovil.mediapp.view.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,7 +25,6 @@ class EditAppointmentFragment : Fragment() {
     private lateinit var binding: FragmentEditAppointmentBinding
     private lateinit var receivedAppointment: MedicalAppointment
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +35,11 @@ class EditAppointmentFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getAppointmentData()
+        validateData()
+        binding.imageButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun getAppointmentData() {
@@ -41,57 +47,68 @@ class EditAppointmentFragment : Fragment() {
 
         receivedAppointment = receivedBundle?.getSerializable("appointmentData") as MedicalAppointment
 
+        binding.editTextDate.setText(receivedAppointment.date)
+        binding.editTextTime.setText(receivedAppointment.time)
+
+        val specialties = resources.getStringArray(R.array.specialties_array)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, specialties)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerSpecialty.adapter = adapter
+
+        val position = specialties.indexOf(receivedAppointment.doctorSpecialty)
+        if (position >= 0) {
+            binding.spinnerSpecialty.setSelection(position)
+        }
+
 
     }
 
     private fun validateData() {
 
-       /* val listEditText = listOf(binding.nameEditText, binding.nameOwnerEditText, binding.razaAutoCompleteTextView, binding.telephoneEditText)
+        val listEditText = listOf(binding.spinnerSpecialty, binding.editTextDate, binding.editTextTime)
 
+
+/*
         fun isFormFilled(): Boolean {
             return listEditText.all { it.text.isNotEmpty() }
         }
 
         listEditText.forEach { editText ->
-            editText.addTextChangedListener {
-                binding.btnEdit.isEnabled = isFormFilled()
-                binding.btnEdit.setTextColor(if (binding.btnEdit.isEnabled) Color.WHITE else Color.parseColor("#FF000000"))
-            }
+            binding.button2.isEnabled = isFormFilled()
+            binding.button2.setTextColor(if (binding.button2.isEnabled) Color.WHITE else Color.parseColor("#FF000000"))
+
         }
 
-        binding.btnEdit.isEnabled = isFormFilled()
-        binding.btnEdit.setTextColor(if (binding.btnEdit.isEnabled) Color.WHITE else Color.parseColor("#FF000000"))
-
-        binding.btnEdit.setOnClickListener {
+        binding.button2.isEnabled = isFormFilled()
+        binding.button2.setTextColor(if (binding.button2.isEnabled) Color.WHITE else Color.parseColor("#FF000000"))
+*/
+        binding.button2.setOnClickListener {
             updateAppointment()
         }
 
-        */
     }
 
     private fun updateAppointment(){
 
         val id = receivedAppointment.id
 
-        /*
-        val dogName = binding.nameEditText.text.toString()
+        val specialty = binding.spinnerSpecialty.selectedItem.toString()
+        val time = binding.editTextTime.text.toString()
+        val date = binding.editTextDate.text.toString()
 
-        val appointment = MedicalAppointment(id = id, )
-        appointmentViewModel.editAppointmentByPatient(id, date) {success ->
+        appointmentViewModel.editAppointmentByPatient(id, date, time, specialty) {success ->
 
             if (success) {
-                Toast.makeText(context, "Appointment created successfully", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_addAppointmentFragment_to_homeFragment)
+                Toast.makeText(context,"¡Su cita se ha actualizado correctamente!", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_editAppointmentFragment_to_homeFragment)
 
             } else {
-                Toast.makeText(context, "Failed to create appointment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to update appointment", Toast.LENGTH_SHORT).show()
             }
 
         }
-        Toast.makeText(context,"¡Su cita se ha actualizado correctamente!", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_editAppointmentFragment_to_homeFragment)
 
-         */
+
 
     }
 
