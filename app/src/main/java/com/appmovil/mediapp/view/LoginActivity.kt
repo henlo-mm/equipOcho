@@ -35,17 +35,18 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun loginUser(){
+    private fun loginUser() {
         val email = binding.editemail.text.toString()
         val pass = binding.editpassword.text.toString()
-        authViewModel.loginUser(email,pass){ isLogin ->
+        authViewModel.loginUser(email, pass).observe(this) { isLogin ->
             if (isLogin) {
                 goToHome(email)
-            }else {
+            } else {
                 Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun goToHome(email: String?){
         val intent = Intent(this, MainActivity::class.java)

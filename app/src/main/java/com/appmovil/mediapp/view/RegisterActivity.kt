@@ -66,21 +66,22 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerUser() {
-        val email = binding.editemailregister.text.toString().trim()
-        val pass = binding.editpasswordregister.text.toString()
+        val email = binding.editemailregister.text.toString()
+        val pass = binding.editcontrasena.text.toString()
         val name = binding.editnombre.text.toString()
         val lastname = binding.editApellido.text.toString()
+        val document = binding.editDocument.text.toString()
 
-        authViewModel.registerUser(email, pass, name, lastname, "patient") { isRegister ->
+        authViewModel.registerUser(email, pass, name, lastname, document, "patient", "") { isRegister ->
             if (isRegister) {
                 Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
                 goToHome(email)
-
             } else {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun goToHome(email: String?){
         val intent = Intent(this, MainActivity::class.java)
